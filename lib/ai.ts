@@ -22,6 +22,7 @@ export function getOpenAIClient(): OpenAI {
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) throw new MissingApiKeyError();
 
-  cachedClient = new OpenAI({ apiKey });
+  // 응답이 늦어지면 기다리지 않고 오류로 처리한다(실행 제한 시간 안에 끝내기 위해, CHECK.md 높음 4)
+  cachedClient = new OpenAI({ apiKey, timeout: 25_000, maxRetries: 1 });
   return cachedClient;
 }

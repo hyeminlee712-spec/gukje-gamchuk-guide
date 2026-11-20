@@ -14,6 +14,9 @@ export const DISCLAIMER = LEGAL_DISCLAIMER;
 
 // 하루에 할 수 있는 질문 수 (PRD 7번). 실제 제한은 작업 9에서 서버가 적용한다.
 export const DAILY_QUESTION_LIMIT = 5;
+// 한도 우회·비용 남용 방어용 하루 상한(CHECK.md 높음 1). 같은 접속 주소(기관 공용 주소 포함)와 서비스 전체에 둔다.
+export const IP_DAILY_LIMIT = 100;
+export const GLOBAL_DAILY_LIMIT = 1000;
 
 // 하루 한도를 모두 썼을 때 보여 주는 안내 (서버 응답과 화면이 같은 문장을 쓴다)
 export const LIMIT_REACHED_MESSAGE = `오늘 질문 ${DAILY_QUESTION_LIMIT}개를 모두 사용했습니다. 내일 다시 이용해 주세요.`;

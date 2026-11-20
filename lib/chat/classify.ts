@@ -37,6 +37,7 @@ export async function classifyQuestion(
   try {
     const client = getOpenAIClient();
     const response = await client.responses.create({
+      store: false, // OpenAI 쪽에 요청 내용을 저장하지 않는다(CHECK.md 보안 8)
       model: CLASSIFY_MODEL,
       instructions: INSTRUCTIONS,
       input: `질문:\n"""\n${question}\n"""`,

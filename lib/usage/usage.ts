@@ -1,7 +1,7 @@
 // Design Ref: §3.2, §5 daily_usage — 하루 질문 5개 제한.
 // Plan SC: 작업 9 — 한 브라우저당 하루 5개(한국시간 자정에 초기화), 브라우저에 무작위 값을 저장해 구분하고 IP는 쓰지 않는다.
 // 서버 코드에서만 불러온다.
-import { createHash, randomUUID } from "node:crypto";
+import { createHash, createHmac, randomUUID } from "node:crypto";
 import { cookies } from "next/headers";
 import { DAILY_QUESTION_LIMIT } from "@/lib/chat/constants";
 import { callRpc } from "@/lib/db";
@@ -66,6 +66,30 @@ export async function refundQuestion(browserHash: string): Promise<void> {
     p_hash: browserHash,
     p_date: kstToday(),
   });
+}
+
+// ── 한도 우회·비용 남용 방어 (CHECK.md 높음 1) ──
+// 쿠키를 지우거나 빼고 보내도 새 한도를 받지 못하게, 접속 주소(IP) 묶음과 서비스 전체 묶음에도 하루 상한을 둔다.
+// IP는 원래 값을 저장하지 않고, 비밀 값으로 섞은 해시로만 센다. 기관 공용 주소를 고려해 IP 상한은 넉넉하게 잡았다.
+export function ipBucketKey(request: Request): string {
+  const ip =
+    request.headers.get("x-real-ip") ??
+    request.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ??
+    "unknown";
+  const salt = process.env.CRON_SECRET ?? "";
+  return `ip:${createHmac("sha256", salt).update(ip).digest("hex")}`;
+}
+
+export const GLOBAL_BUCKET_KEY = "global";
+
+// 묶음 하나(IP 또는 전체)에서 1회를 쓴다. 한도를 넘으면 allowed가 false이다.
+export async function consumeBucket(key: string, limit: number): Promise<boolean> {
+  const rows = await callRpc<ConsumeResult[]>("consume_daily_question", {
+    p_hash: key,
+    p_date: kstToday(),
+    p_limit: limit,
+  });
+  return Boolean(rows[0]?.allowed);
 }
 
 // 오늘 남은 질문 수를 본다.

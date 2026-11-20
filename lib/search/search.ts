@@ -27,6 +27,7 @@ function isAllowedUrl(url: string): boolean {
   try {
     const parsed = new URL(url);
     // 법제처 API 주소(/DRF/…)는 사람이 읽는 원문이 아니고 인증값(OC)이 들어갈 수 있어 출처로 쓰지 않는다.
+    if (parsed.protocol !== "https:" && parsed.protocol !== "http:") return false;
     if (parsed.pathname.toUpperCase().startsWith("/DRF/")) return false;
     const host = parsed.hostname.toLowerCase();
     return ALLOWED_DOMAINS.some(
@@ -43,6 +44,7 @@ export async function searchOfficialSources(
   const client = getOpenAIClient();
 
   const response = await client.responses.create({
+      store: false, // OpenAI 쪽에 요청 내용을 저장하지 않는다(CHECK.md 보안 8)
     model: SEARCH_MODEL,
     instructions: SEARCH_INSTRUCTIONS,
     input: `사용자 질문:\n"""\n${question}\n"""`,

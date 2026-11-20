@@ -86,6 +86,7 @@ async function callModel(
     : "";
 
   const response = await client.responses.create({
+      store: false, // OpenAI 쪽에 요청 내용을 저장하지 않는다(CHECK.md 보안 8)
     model: ANSWER_MODEL,
     instructions: INSTRUCTIONS,
     input: `사용자 질문:\n"""\n${question}\n"""\n\n사용 가능한 출처 목록:\n${sourceLines}\n\n검색 정리:\n"""\n${search.findings}\n"""${shortenNote}`,
@@ -184,7 +185,13 @@ export async function composeAnswer(
   if (!text || verified.length === 0) return { status: "unverified" };
 
   // 국내 법령·지침의 마지막 개정일은 법제처 공개 API로 채운다.
-  const sources = await applyOfficialRevisions(verified);
+  const revised = await applyOfficialRevisions(verified);
+
+  // 출처 표기 100%(PLAN SC-4): 조항이 있고 개정일에 연도가 들어 있는 출처만 남긴다. 하나도 없으면 답하지 않는다.
+  const sources = revised.filter(
+    (s) => s.article !== UNKNOWN_LABEL && /\d{4}/.test(s.lastRevised),
+  );
+  if (sources.length === 0) return { status: "unverified" };
 
   return { status: "answered", answer: { text, sources, disclaimer: DISCLAIMER } };
 }

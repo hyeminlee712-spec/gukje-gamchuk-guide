@@ -72,6 +72,7 @@ export async function collectNews(): Promise<NewsCollectResult> {
     const since = kstDate(-lookbackDays);
 
     const response = await getOpenAIClient().responses.create({
+      store: false, // OpenAI 쪽에 요청 내용을 저장하지 않는다(CHECK.md 보안 8)
       model: NEWS_MODEL,
       instructions: `당신은 국제감축·파리협정 제6조 관련 뉴스를 모아 주는 도우미입니다. 오늘은 ${today}(한국시간)입니다.
 - 키워드(${NEWS_KEYWORDS.join(", ")})로 ${since} 이후에 나온 기사를 검색해 최신순으로 최대 ${MAX_NEWS}건 고릅니다. 한국어와 영어 기사를 모두 포함합니다.

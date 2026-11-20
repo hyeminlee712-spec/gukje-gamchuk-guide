@@ -11,9 +11,9 @@ const SEP = "[-.\\s]?";
 // 이메일: 이름@도메인.최상위
 const EMAIL = /[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}/g;
 
-// 주민등록번호: 앞 6자리 + 뒤 7자리(첫 자리 1~4)
+// 주민·외국인등록번호: 앞 6자리 + 뒤 7자리(첫 자리 1~8)
 const RESIDENT_ID = new RegExp(
-  `${BOUNDARY_START}[0-9]{6}[-\\s]?[1-4][0-9]{6}${BOUNDARY_END}`,
+  `${BOUNDARY_START}[0-9]{6}[-\\s]?[1-8][0-9]{6}${BOUNDARY_END}`,
   "g",
 );
 
@@ -32,7 +32,9 @@ const PHONE = new RegExp(
 // 질문 속 개인정보를 "[이메일]", "[전화번호]", "[주민등록번호]"로 바꾼다.
 // 순서: 주민등록번호를 먼저 가려야 13자리 숫자가 전화번호 모양과 겹치지 않는다.
 export function maskPersonalInfo(text: string): string {
+  // 전각 숫자·기호(０１２…)를 일반 숫자로 바꿔 가림 규칙을 피해 가지 못하게 한다(CHECK.md 중요 10).
   return text
+    .normalize("NFKC")
     .replace(EMAIL, "[이메일]")
     .replace(RESIDENT_ID, "[주민등록번호]")
     .replace(PHONE, "[전화번호]");

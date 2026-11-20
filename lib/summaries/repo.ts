@@ -16,9 +16,14 @@ type SummaryRow = {
 
 // 상태가 '게시'인 요약을 기준일이 최근인 순서로 가져온다.
 export async function listPublishedSummaries(): Promise<SummaryItem[]> {
+  // 이번 달(한국시간)에 게시된 요약만 보여 준다. 지난달 이전 요약은 빠지고, 없으면 "이번 달 변동사항이 없습니다"가 나온다(CHECK.md 중요 5).
+  const monthStart = new Intl.DateTimeFormat("sv-SE", { timeZone: "Asia/Seoul" })
+    .format(new Date())
+    .slice(0, 7);
   const rows = await selectRows<SummaryRow>("summaries", {
     select: "id,category,title,summary_ko,source_url,as_of,is_sample",
     status: "eq.published",
+    published_at: `gte.${monthStart}-01T00:00:00+09:00`,
     order: "as_of.desc,created_at.desc",
   });
 

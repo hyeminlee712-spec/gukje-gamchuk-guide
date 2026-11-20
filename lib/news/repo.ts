@@ -22,8 +22,13 @@ type Row = {
 };
 
 export async function listLatestNews(limit = 10): Promise<NewsItem[]> {
+  // 오래된 기사가 "오늘의 뉴스"로 보이지 않도록 최근 4일(월요일의 주말 기사 포함) 안의 기사만 보여 준다(CHECK.md 중요 6).
+  const since = new Intl.DateTimeFormat("sv-SE", { timeZone: "Asia/Seoul" }).format(
+    new Date(Date.now() - 4 * 86400000),
+  );
   const rows = await selectRows<Row>("news", {
     select: "id,title,original_title,outlet,published_on,source_url,summary_ko",
+    published_on: `gte.${since}`,
     order: "published_on.desc,collected_at.desc",
     limit: String(limit),
   });

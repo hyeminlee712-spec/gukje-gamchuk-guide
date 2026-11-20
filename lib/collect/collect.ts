@@ -115,6 +115,7 @@ export async function collectCategory(rule: Rule): Promise<CategoryResult> {
     const client = getOpenAIClient();
 
     const response = await client.responses.create({
+      store: false, // OpenAI 쪽에 요청 내용을 저장하지 않는다(CHECK.md 보안 8)
       model: COLLECT_MODEL,
       instructions: buildInstructions(rule, today),
       input: `${rule.label}의 최근 변동사항을 찾아 정리해 주세요.`,

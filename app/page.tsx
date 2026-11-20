@@ -19,7 +19,6 @@ function Corner({
   id,
   no,
   title,
-  description,
   theme,
   moreHref,
   scroll,
@@ -29,7 +28,6 @@ function Corner({
   id: string;
   no: string;
   title: string;
-  description: string;
   theme: keyof typeof THEMES;
   moreHref?: string;
   scroll?: boolean;
@@ -41,7 +39,7 @@ function Corner({
     <section
       id={id}
       aria-labelledby={`${id}-title`}
-      className={`scroll-mt-20 border border-line bg-white ${className ?? ""}`}
+      className={`scroll-mt-20 flex flex-col border border-line bg-white ${className ?? ""}`}
     >
       <div className={`h-1.5 ${t.bar}`} />
       <div className="flex items-start justify-between gap-4 px-6 pb-3 pt-5">
@@ -52,7 +50,6 @@ function Corner({
           <h2 id={`${id}-title`} className="mt-1 text-2xl font-extrabold tracking-tight text-navy">
             {title}
           </h2>
-          <p className="mt-2 text-sm leading-relaxed text-foreground/70">{description}</p>
         </div>
         {moreHref && (
           <Link
@@ -63,8 +60,8 @@ function Corner({
           </Link>
         )}
       </div>
-      {/* 넓은 화면에서는 코너 안에서만 스크롤해 두 열의 높이를 맞춘다 */}
-      <div className={`px-6 pb-6 ${scroll ? "lg:max-h-[720px] lg:overflow-y-auto" : ""}`}>{children}</div>
+      {/* 넓은 화면에서는 코너가 칸 높이를 채우고(아래 선이 맞음), 내용이 길면 코너 안에서만 스크롤한다 */}
+      <div className={`flex-1 px-6 pb-6 ${scroll ? "lg:min-h-0 lg:overflow-y-auto" : ""}`}>{children}</div>
     </section>
   );
 }
@@ -79,7 +76,7 @@ export default function HomePage() {
         <div aria-hidden className="pointer-events-none absolute right-40 top-20 h-44 w-44 rounded-full bg-[#4a9bd6]/25" />
         <div className="relative mx-auto max-w-7xl px-4 py-12 sm:py-16">
           <h1 className="max-w-3xl text-4xl font-extrabold leading-tight tracking-tight sm:text-5xl">
-            국제감축 길잡이
+            국제감축 협력사업 주요 현황
           </h1>
           <p className="mt-4 max-w-2xl text-base leading-relaxed text-white/80 sm:text-lg">
             UN 제도와 국내 법령·부처 지침을 쉬운 국문으로 알려 드립니다. 관련 뉴스와 최신 소식은 아래에서 한눈에 확인하고,
@@ -89,15 +86,14 @@ export default function HomePage() {
       </section>
 
       <div className="mx-auto max-w-7xl px-4 py-8">
-        <div className="grid items-start gap-6 lg:grid-cols-2">
+        <div className="grid items-stretch gap-6 lg:grid-cols-2">
           {/* 왼쪽 열: ① 오늘의 뉴스 + 그 아래 ② UN결정문 */}
-          <div className="space-y-6">
+          <div className="flex flex-col gap-6 lg:min-h-[680px]">
             <Corner
               id="news"
               no="01"
               theme="blue"
               title="오늘의 뉴스"
-              description="파리협정 제6조·국제감축 관련 뉴스를 평일 오전 8시에 갱신합니다. 논조나 언론사로 거르지 않으며, 표시된 내용은 서비스의 입장이 아닙니다."
               moreHref="/news"
             >
               <NewsList />
@@ -106,9 +102,9 @@ export default function HomePage() {
             <Corner
               id="rules"
               no="02"
+              className="flex-1"
               theme="purple"
               title="UN결정문"
-              description="파리협정 제6조 관련 결정문과 감독기구 결정의 변동 요약입니다. 확인을 마친 요약만 게시됩니다."
               moreHref="/monthly"
             >
               <MonthlySummaries sections={[0]} bare />
@@ -119,9 +115,9 @@ export default function HomePage() {
           <Corner
             id="latest"
             no="03"
+            className="lg:[contain:size]"
             theme="orange"
             title="최근 현황"
-            description="UN 사업 현황을 국문 요약으로 보여 드립니다. 확인을 마친 요약만 게시됩니다."
             moreHref="/monthly"
             scroll
           >
@@ -133,8 +129,7 @@ export default function HomePage() {
             id="chatbot"
             no="04"
             theme="green"
-            title="챗봇 — 규정 질문하기"
-            description="국제감축 규정(UN 제도, 국내 법령·지침)을 쉬운 국문으로 알려 드립니다."
+            title="궁금합니다"
             className="lg:col-span-2"
           >
             <ChatPanel />

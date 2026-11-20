@@ -34,7 +34,31 @@ body {
   background: var(--page);
   color: var(--foreground);
   /* 한글이 깨끗하게 보이도록 한글 글꼴을 우선 지정한다 */
-  font-family: "Malgun Gothic", "Apple SD Gothic Neo", "Noto Sans KR", var(--font-sans), sans-serif;
+  /* 나눔고딕을 우선 쓰고, 불러오지 못하면 시스템 한글 글꼴을 쓴다 */
+  font-family: var(--font-nanum), "NanumGothic", "나눔고딕", "Malgun Gothic", "Apple SD Gothic Neo", "Noto Sans KR", var(--font-sans), sans-serif;
+  line-height: 1.7;
+}
+
+/* 줄바꿈: 한글은 단어(어절) 단위로 넘기고, 마지막 줄에 한두 글자만 덩그러니 남지 않도록 앞 줄과 균형을 맞춘다 */
+p,
+li,
+figcaption,
+dd,
+blockquote {
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  text-wrap: pretty;
+}
+
+/* 제목은 줄 길이를 고르게 나눈다 */
+h1,
+h2,
+h3,
+h4,
+h5 {
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  text-wrap: balance;
 }
 
 @media (prefers-reduced-motion: reduce) {

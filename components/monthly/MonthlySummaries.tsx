@@ -4,6 +4,7 @@
 // UNFCCC 구역 안에서는 초기보고서와 방법론을 나눠 보여 준다. 게시된 요약만 보이고, 항목이 없는 구역에는 안내 문구를 보여 준다.
 // 요약은 `GET /api/summaries`에서 가져온다.
 import { useEffect, useState } from "react";
+import ItmoChart from "@/components/monthly/ItmoChart";
 import SummaryCard from "@/components/monthly/SummaryCard";
 import { SUMMARY_SECTIONS, type SummaryItem } from "@/lib/summaries/types";
 
@@ -100,10 +101,14 @@ export default function MonthlySummaries({ sections, bare }: { sections?: number
             <h3 id={headingId} className={`text-xl font-extrabold tracking-tight ${tone.title}`}>
               {section.title}
             </h3>
-            <p className="mt-1 text-sm text-foreground/70">{section.description}</p>
+            {section.description && <p className="mt-1 text-sm text-foreground/70">{section.description}</p>}
 
             <div className="mt-3 space-y-4">
-              {section.categories.map(({ category, label }) => {
+              {section.categories[0]?.category === "unep_pipeline" ? (
+                // UNEP Pipeline 현황은 AI 요약 대신 원문 사이트의 ITMOs 목록을 그대로 막대그래프로 보여 준다.
+                <ItmoChart />
+              ) : null}
+              {section.categories[0]?.category === "unep_pipeline" ? null : section.categories.map(({ category, label }) => {
                 const sectionItems = state.items.filter((i) => i.category === category);
                 return (
                   <div key={category} className="space-y-3">

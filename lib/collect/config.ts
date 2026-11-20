@@ -38,16 +38,6 @@ export const CATEGORY_RULES: CategoryRule[] = [
     lookbackDays: 14,
   },
   {
-    category: "unep_pipeline",
-    job: "monthly",
-    label: "UNEP Pipeline 사업 현황",
-    domains: ["unepccc.org"],
-    target:
-      "UNEP-CCC의 Article 6 Pipeline(및 CDM 전환 현황) 자료 중 한국(Republic of Korea)이 관련된 사업(주최국 또는 구매국)과 " +
-      "지난달 대비 달라진 내용만 찾습니다. 기준일은 원문에 적힌 갱신일이며, 원문에 없으면 찾은 날짜(오늘)입니다.",
-    lookbackDays: 45,
-  },
-  {
     category: "unfccc_initial_report",
     job: "monthly",
     label: "UNFCCC 초기보고서 현황",

@@ -98,7 +98,7 @@ export default function ChatPanel() {
           onChange={(event) => setQuestion(event.target.value)}
           rows={3}
           placeholder="질문을 입력하세요 (한국어)"
-          className="w-full resize-y rounded-lg border border-foreground/30 bg-background p-3 text-sm"
+          className="w-full resize-y rounded-sm border border-foreground/30 bg-background p-3 text-sm"
         />
 
         <div className="flex items-center justify-between gap-2">
@@ -116,7 +116,7 @@ export default function ChatPanel() {
             <button
               type="submit"
               disabled={isEmpty || isLoading || isLimitReached}
-              className="rounded-md bg-foreground px-4 py-2 text-sm font-semibold text-background disabled:opacity-40"
+              className="rounded-sm bg-undp px-4 py-2 text-sm font-bold text-white hover:bg-undp-dark disabled:opacity-40"
             >
               {isLoading ? "답변 만드는 중…" : "질문하기"}
             </button>
@@ -129,7 +129,7 @@ export default function ChatPanel() {
         {errorMessage && (
           <p
             role="alert"
-            className="rounded-md border border-red-500/50 bg-red-500/10 p-3 text-sm text-red-700 dark:text-red-300"
+            className="rounded-sm border border-red-500/50 bg-red-500/10 p-3 text-sm text-red-700 dark:text-red-300"
           >
             {errorMessage}
           </p>
@@ -138,7 +138,7 @@ export default function ChatPanel() {
         {isLimitReached && !errorMessage && (
           <p
             role="status"
-            className="rounded-md border border-red-500/50 bg-red-500/10 p-3 text-sm text-red-700 dark:text-red-300"
+            className="rounded-sm border border-red-500/50 bg-red-500/10 p-3 text-sm text-red-700 dark:text-red-300"
           >
             {LIMIT_REACHED_MESSAGE}
           </p>

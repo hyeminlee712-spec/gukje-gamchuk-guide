@@ -36,7 +36,7 @@ export default function NewsList() {
   if (state.kind === "loading") return <p className="text-sm text-foreground/70">뉴스를 불러오는 중…</p>;
   if (state.kind === "error") {
     return (
-      <p role="alert" className="rounded-md border border-red-500/50 bg-red-500/10 p-3 text-sm text-red-700 dark:text-red-300">
+      <p role="alert" className="rounded-sm border border-red-500/50 bg-red-500/10 p-3 text-sm text-red-700 dark:text-red-300">
         {state.message}
       </p>
     );
@@ -46,8 +46,8 @@ export default function NewsList() {
   return (
     <ul className="space-y-3">
       {state.items.map((n) => (
-        <li key={n.id} className="rounded-lg border border-foreground/20 p-4">
-          <h2 className="font-semibold">{n.title}</h2>
+        <li key={n.id} className="border border-line bg-white p-4">
+          <h3 className="font-semibold">{n.title}</h3>
           {n.originalTitle && <p className="mt-0.5 text-xs text-foreground/60">원제: {n.originalTitle}</p>}
           {n.summaryKo && <p className="mt-2 text-sm leading-relaxed">{n.summaryKo}</p>}
           <p className="mt-3 text-xs text-foreground/70">

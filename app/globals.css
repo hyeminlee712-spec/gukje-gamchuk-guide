@@ -1,27 +1,44 @@
 @import "tailwindcss";
 
+/* 디자인 방향: 국제기구(UNDP) 누리집처럼 밝은 바탕, 짙은 남색 머리·바닥, UN 파랑 강조, 각진 카드, 굵은 제목 */
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #1f2430;
+  --page: #f4f5f7; /* 본문 바탕(연회색) */
+  --undp-blue: #0468b1; /* 대표 파랑 */
+  --undp-blue-dark: #03528d;
+  --navy: #232d3f; /* 짙은 남색(머리글·소개·바닥) */
+  --undp-red: #d12800; /* 작은 강조(화살표) */
+  --line: #dcdfe4;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-page: var(--page);
+  --color-undp: var(--undp-blue);
+  --color-undp-dark: var(--undp-blue-dark);
+  --color-navy: var(--navy);
+  --color-undp-red: var(--undp-red);
+  --color-line: var(--line);
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+/* 메뉴를 누르면 해당 구역으로 부드럽게 이동한다 */
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
+  background: var(--page);
   color: var(--foreground);
   /* 한글이 깨끗하게 보이도록 한글 글꼴을 우선 지정한다 */
   font-family: "Malgun Gothic", "Apple SD Gothic Neo", "Noto Sans KR", var(--font-sans), sans-serif;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }

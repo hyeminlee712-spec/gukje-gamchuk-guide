@@ -19,7 +19,7 @@ export default function AnswerCard({
   return (
     <section
       aria-label="답변"
-      className="rounded-lg border border-foreground/20 p-4"
+      className="border border-line bg-white p-4"
     >
       {temporary && (
         <p className="mb-2 inline-block rounded bg-foreground/10 px-2 py-0.5 text-xs">

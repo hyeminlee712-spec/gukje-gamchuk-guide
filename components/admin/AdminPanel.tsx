@@ -17,7 +17,7 @@ type Pending = {
 type Question = { id: string; question: string; outcome: string; createdAt: string };
 
 const CATEGORY_LABEL: Record<string, string> = {
-  un_rules: "UN 규정 변동",
+  un_rules: "규정 및 지침 등",
   unep_pipeline: "UNEP Pipeline",
   unfccc_initial_report: "UNFCCC 초기보고서",
   unfccc_methodology: "UNFCCC 방법론",
@@ -146,7 +146,7 @@ export default function AdminPanel() {
           autoComplete="current-password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="w-full rounded-md border border-foreground/30 bg-background p-2"
+          className="w-full rounded-sm border border-foreground/30 bg-background p-2"
         />
         {message && (
           <p role="alert" className="text-sm text-red-700 dark:text-red-300">
@@ -156,7 +156,7 @@ export default function AdminPanel() {
         <button
           type="submit"
           disabled={busy || password.length === 0}
-          className="rounded-md bg-foreground px-4 py-2 text-sm text-background disabled:opacity-50"
+          className="rounded-sm bg-undp px-4 py-2 text-sm font-bold text-white hover:bg-undp-dark disabled:opacity-50"
         >
           로그인
         </button>
@@ -174,7 +174,7 @@ export default function AdminPanel() {
       </div>
 
       {message && (
-        <p role="status" className="rounded-md border border-foreground/20 p-3 text-sm">
+        <p role="status" className="rounded-sm border border-foreground/20 p-3 text-sm">
           {message}
         </p>
       )}
@@ -187,7 +187,7 @@ export default function AdminPanel() {
           <p className="text-sm text-foreground/70">확인 대기 중인 요약이 없습니다.</p>
         )}
         {pending.map((p) => (
-          <article key={p.id} className="space-y-2 rounded-lg border border-foreground/20 p-4">
+          <article key={p.id} className="space-y-2 rounded-sm border border-foreground/20 p-4">
             <div className="flex flex-wrap items-center gap-2 text-xs">
               <span className="rounded bg-foreground/10 px-2 py-0.5">
                 {CATEGORY_LABEL[p.category] ?? p.category}
@@ -224,14 +224,14 @@ export default function AdminPanel() {
               <button
                 disabled={busy || !checked[p.id]}
                 onClick={() => decide(p.id, "publish")}
-                className="rounded-md bg-foreground px-3 py-1.5 text-sm text-background disabled:opacity-40"
+                className="rounded-sm bg-undp px-3 py-1.5 text-sm font-bold text-white hover:bg-undp-dark disabled:opacity-40"
               >
                 게시
               </button>
               <button
                 disabled={busy}
                 onClick={() => decide(p.id, "reject")}
-                className="rounded-md border border-foreground/40 px-3 py-1.5 text-sm disabled:opacity-40"
+                className="rounded-sm border border-foreground/40 px-3 py-1.5 text-sm disabled:opacity-40"
               >
                 반려
               </button>
@@ -256,7 +256,7 @@ export default function AdminPanel() {
           <p className="text-sm text-foreground/70">저장된 질문이 없습니다.</p>
         )}
         {questions && questions.length > 0 && (
-          <ul className="divide-y divide-foreground/10 rounded-lg border border-foreground/20">
+          <ul className="divide-y divide-foreground/10 rounded-sm border border-foreground/20">
             {questions.map((q) => (
               <li key={q.id} className="space-y-1 p-3 text-sm">
                 <p>{q.question}</p>

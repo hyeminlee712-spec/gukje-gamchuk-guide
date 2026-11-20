@@ -4,7 +4,7 @@ import { connection } from "next/server";
 import { isAuthorizedCron } from "@/lib/collect/auth";
 import { runCollectJob } from "@/lib/collect/collect";
 
-export const maxDuration = 60;
+export const maxDuration = 300; // UNFCCC 표를 여러 번 읽으므로 넉넉히 둔다
 
 export async function GET(request: Request) {
   await connection();

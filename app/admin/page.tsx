@@ -9,7 +9,7 @@ export const metadata: Metadata = {
 
 export default function AdminPage() {
   return (
-    <div className="space-y-6">
+    <div className="mx-auto max-w-7xl space-y-6 px-4 py-8">
       <h1 className="text-2xl font-bold">관리자</h1>
       <AdminPanel />
     </div>

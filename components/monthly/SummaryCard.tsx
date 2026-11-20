@@ -5,9 +5,9 @@ type SummaryCardProps = { item: SummaryItem };
 
 export default function SummaryCard({ item }: SummaryCardProps) {
   return (
-    <article className="rounded-lg border border-foreground/20 p-4">
+    <article className="border border-line bg-white p-4">
       <div className="mb-1 flex flex-wrap items-center gap-2">
-        <h4 className="font-semibold">{item.title}</h4>
+        <h5 className="font-semibold">{item.title}</h5>
         {/* 화면 확인용 샘플이면 실제 요약이 아니라는 것을 분명히 알린다 */}
         {item.isSample && (
           <span className="rounded bg-foreground/10 px-2 py-0.5 text-xs">

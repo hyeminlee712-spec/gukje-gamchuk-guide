@@ -4,9 +4,9 @@ import MonthlySummaries from "@/components/monthly/MonthlySummaries";
 
 export default function MonthlyPage() {
   return (
-    <div className="space-y-6">
+    <div className="mx-auto max-w-4xl space-y-6 px-4 py-8">
       <div>
-        <h1 className="text-2xl font-bold">월별 변동사항</h1>
+        <h1 className="text-2xl font-bold">최신 뉴스</h1>
         <p className="mt-1 text-sm text-foreground/70">
           UN 규정 변동과 사업 현황을 국문 요약으로 보여 드립니다. 확인을 마친
           요약만 게시됩니다.

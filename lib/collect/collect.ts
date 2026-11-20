@@ -11,6 +11,7 @@ import {
   type CollectJob,
 } from "@/lib/collect/config";
 import { DbRequestError, insertRowsIgnoreDuplicates } from "@/lib/db";
+import { collectApprovedMethodologies, collectInitialReportStatus } from "@/lib/collect/unfccc";
 import { cleanUrl } from "@/lib/search/url";
 import type { SummaryCategory } from "@/lib/summaries/types";
 
@@ -213,5 +214,12 @@ export async function collectCategory(rule: Rule): Promise<CategoryResult> {
 
 // 한 종류의 일(주 1회 UN 규정 변동 / 월 1회 현황)에 속한 구분을 모두 수집한다.
 export async function runCollectJob(job: CollectJob): Promise<CategoryResult[]> {
-  return Promise.all(rulesForJob(job).map((rule) => collectCategory(rule)));
+  return Promise.all(
+    rulesForJob(job).map((rule) => {
+      // UNFCCC 초기보고서·방법론은 지정한 페이지의 표를 읽는 전용 수집을 쓴다(lib/collect/unfccc.ts).
+      if (rule.category === "unfccc_initial_report") return collectInitialReportStatus();
+      if (rule.category === "unfccc_methodology") return collectApprovedMethodologies();
+      return collectCategory(rule);
+    }),
+  );
 }

@@ -29,7 +29,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       {/* Design Ref: §3.1 — 머리글(메뉴) / 선택한 화면 / 이용 안내 순서의 공통 틀 */}
       <body className="min-h-full flex flex-col">
         <SiteHeader />
-        <main className="mx-auto w-full max-w-4xl flex-1 px-4 py-6">
+        <main className="flex-1">
           {children}
         </main>
         <SiteFooter />

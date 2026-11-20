@@ -3,7 +3,7 @@ import NewsList from "@/components/news/NewsList";
 
 export default function NewsPage() {
   return (
-    <div className="space-y-4">
+    <div className="mx-auto max-w-4xl space-y-4 px-4 py-8">
       <div>
         <h1 className="text-2xl font-bold">오늘의 뉴스</h1>
         <p className="mt-1 text-sm text-foreground/70">

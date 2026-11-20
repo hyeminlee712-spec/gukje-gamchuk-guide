@@ -12,7 +12,15 @@ type LoadState =
   | { kind: "error"; message: string }
   | { kind: "ready"; items: SummaryItem[] };
 
-export default function MonthlySummaries() {
+// 가·나·다 구역마다 다른 색 왼쪽 줄과 제목색을 쓴다.
+const TONES = [
+  { box: "border-l-[6px] border-[#6b3fa0]", title: "text-[#6b3fa0]" },
+  { box: "border-l-[6px] border-[#c4247a]", title: "text-[#c4247a]" },
+  { box: "border-l-[6px] border-[#00859b]", title: "text-[#00859b]" },
+] as const;
+
+// sections: 보여 줄 구역 번호(0=가, 1=나, 2=다). 없으면 모두 보여 준다. 홈 화면에서 구역을 나눠 배치할 때 쓴다.
+export default function MonthlySummaries({ sections }: { sections?: number[] } = {}) {
   const [state, setState] = useState<LoadState>({ kind: "loading" });
 
   useEffect(() => {
@@ -57,7 +65,7 @@ export default function MonthlySummaries() {
     return (
       <p
         role="alert"
-        className="rounded-md border border-red-500/50 bg-red-500/10 p-3 text-sm text-red-700 dark:text-red-300"
+        className="rounded-sm border border-red-500/50 bg-red-500/10 p-3 text-sm text-red-700 dark:text-red-300"
       >
         {state.message}
       </p>
@@ -65,35 +73,46 @@ export default function MonthlySummaries() {
   }
 
   return (
-    <div className="space-y-8">
-      {SUMMARY_SECTIONS.map((section) => (
-        <section key={section.title} aria-labelledby={section.title}>
-          <h2 id={section.title} className="text-lg font-bold">
-            {section.title}
-          </h2>
-          <p className="mt-1 text-sm text-foreground/70">{section.description}</p>
+    <div className="space-y-4">
+      {SUMMARY_SECTIONS.map((section, index) => {
+        if (sections && !sections.includes(index)) return null;
+        const tone = TONES[index % TONES.length];
+        const headingId = `latest-section-${index}`;
+        return (
+          <section
+            key={section.title}
+            aria-labelledby={headingId}
+            className={`border border-line bg-white p-5 ${tone.box}`}
+          >
+            <h3 id={headingId} className={`text-xl font-extrabold tracking-tight ${tone.title}`}>
+              {section.title}
+            </h3>
+            <p className="mt-1 text-sm text-foreground/70">{section.description}</p>
 
-          <div className="mt-3 space-y-4">
-            {section.categories.map(({ category, label }) => {
-              const sectionItems = state.items.filter((i) => i.category === category);
-              return (
-                <div key={category} className="space-y-3">
-                  {label && <h3 className="text-sm font-semibold">{label}</h3>}
-                  {sectionItems.length === 0 ? (
-                    <p className="text-sm text-foreground/70">
-                      이번 달 변동사항이 없습니다.
-                    </p>
-                  ) : (
-                    sectionItems.map((item) => (
-                      <SummaryCard key={item.id} item={item} />
-                    ))
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </section>
-      ))}
+            <div className="mt-3 space-y-4">
+              {section.categories.map(({ category, label }) => {
+                const sectionItems = state.items.filter((i) => i.category === category);
+                return (
+                  <div key={category} className="space-y-3">
+                    {label && <h4 className="text-sm font-semibold">{label}</h4>}
+                    {sectionItems.length === 0 ? (
+                      <p className="text-sm text-foreground/70">
+                        {category === "unfccc_initial_report" || category === "unfccc_methodology"
+                          ? "게시된 현황이 없습니다."
+                          : "이번 달 변동사항이 없습니다."}
+                      </p>
+                    ) : (
+                      sectionItems.map((item) => (
+                        <SummaryCard key={item.id} item={item} />
+                      ))
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+        );
+      })}
     </div>
   );
 }

@@ -104,7 +104,8 @@ export default function SummaryCard({ item }: SummaryCardProps) {
             ))}
           </ul>
         </>
-      ) : (
+      ) : item.category === "unfccc_methodology" ? null : (
+        // 승인된 메커니즘 방법론은 제목(기호 번호·국문·영문)만 보여 주고 아래 설명 문장은 보여 주지 않는다.
         <p className="text-sm leading-relaxed">{item.summaryKo}</p>
       )}
 

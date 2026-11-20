@@ -1,36 +1,75 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 국제감축 길잡이
 
-## Getting Started
+국제감축(파리협정 제6조) 업무를 맡은 정부·공공기관 담당자와 참여 기업 담당자를 위한 **국문 안내 웹 서비스**입니다.
+UN 제도·절차, 국내 법령, 부처별 지침이 여러 기관에 흩어져 있고 대부분 영어라서, 필요한 규정을 찾고 이해하는 데 시간이 많이 듭니다. 이 서비스는 공개 자료만 근거로 쉬운 국문으로 알려 줍니다.
 
-First, run the development server:
+- 서비스 주소: https://gukje-gamchuk-guide.vercel.app
+- 작성자: 이혜민
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+## 화면 구성 (한 화면 홈페이지)
+
+| 코너 | 내용 |
+|---|---|
+| ① 오늘의 뉴스 | 파리협정 제6조·국제감축 관련 뉴스를 평일 오전 8시에 갱신(최대 10건). 논조·언론사로 거르지 않고, 언론사·날짜·원문 링크와 100자 이내 요약을 보여 줍니다. |
+| ② 최신 뉴스 | 가. 규정 및 지침 등(UN 규정 변동) / 나. UNEP Pipeline 현황 / 다. 초기보고서(제출국가·검토보고·중대한 불일치 건수)와 승인된 메커니즘 방법론(국문 번역). 원문 링크와 기준일을 붙이며, **사람이 확인한 요약만 게시**됩니다. |
+| ③ 챗봇 | 규정 질문에 공식 공개 사이트(UN·UNFCCC·국가법령정보센터·각 부처)에서 찾은 근거로만 국문(500자 이내)으로 답하고, 문서명·조항·마지막 개정일을 붙입니다. 근거가 없거나 법률 판단을 묻는 질문에는 "확인되지 않음"과 문의 안내를 보여 줍니다. |
+| 관리자(`/admin`) | 비밀번호로만 열리는 화면. 자동 수집된 요약을 원문과 비교해 게시·반려하고, 저장된 익명 질문을 열람합니다. |
+
+## 지키는 규칙
+
+- 근거를 찾지 못하면 답을 지어내지 않고 "확인되지 않음"으로 알립니다. 법적 효력이 있는 해석이 아니며 법률 자문을 하지 않습니다.
+- 질문은 개인정보(이메일·전화번호 등)를 가린 뒤 익명으로 저장하고 90일 뒤 삭제합니다. 하루 질문은 5개로 제한합니다.
+- 월별 요약은 자동 수집 후 관리자 확인을 거쳐서만 게시하며, 원문에 없는 내용·숫자는 쓰지 않습니다.
+
+## 기술 스택
+
+- **Next.js 16**(App Router) · TypeScript · Tailwind CSS v4
+- **OpenAI API**: 공개 자료 검색·답변·요약 (서버에서만 사용)
+- **Supabase**: 질문·요약·뉴스·질문 횟수 저장
+- **법제처 국가법령정보 공유서비스 OPEN API**: 국내 법령 개정일 확인
+- **Vercel**: 배포, Vercel Cron(뉴스 평일 08:00, UN 규정 변동 주 1회, 월별 현황 월 1회, 정리 매일)
+- Zod: 입력값 검사
+
+## 폴더 구조
+
+```
+app/            화면(/, /monthly, /news, /admin)과 서버 코드(app/api/*)
+components/     화면 조각(챗봇, 뉴스, 최신 뉴스, 관리자)
+lib/            검색·답변·수집·저장·개인정보 가림 등 서비스 로직
+supabase/       저장소 표·함수를 만드는 SQL(migrations)과 샘플 자료(seed)
+PRD.md          기획서(무엇을·왜)
+PLAN.md         계획서(작업 순서·성공 기준)
+DESIGN.md       설계서(화면·데이터 흐름·기술 선택)
+CHECK.md        검증 결과(설계 대비 구현, 성공 기준, 보안 점검)
+CLAUDE.md       프로젝트 규칙
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 직접 실행하려면
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```bash
+npm install
+# 프로젝트 폴더에 .env 파일을 직접 만들어 아래 환경변수 값을 채웁니다(.env는 저장소에 없습니다)
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+필요한 환경변수 (모두 서버에서만 사용하며 이름에 `NEXT_PUBLIC_`을 붙이지 않습니다):
 
-## Learn More
+| 변수 | 용도 |
+|---|---|
+| `OPENAI_API_KEY` | AI 검색·답변·요약 |
+| `SUPABASE_URL`, `SUPABASE_SERVICE_ROLE_KEY` | 저장소 접속 |
+| `LAW_API_OC` | 법제처 공개 API 인증값 |
+| `ADMIN_PASSWORD` | 관리자 화면 비밀번호 |
+| `CRON_SECRET` | 자동 실행(`/api/cron/*`) 요청 확인, 접속 주소 해시용 비밀 값 |
 
-To learn more about Next.js, take a look at the following resources:
+저장소 표는 `supabase/migrations`의 SQL을 번호 순서대로 실행해 만듭니다.
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 보안·개인정보 메모
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- 비밀 키 파일(`.env*`)과 `node_modules`는 저장소에 올리지 않습니다.
+- 공개 API(챗봇)는 브라우저 기준 하루 5개, 접속 주소(해시) 하루 100개, 서비스 전체 하루 1,000개 상한과 같은 사이트 요청만 허용하는 확인을 둡니다.
+- 검증 결과와 남은 조치는 [CHECK.md](CHECK.md)에 있습니다.
 
-## Deploy on Vercel
+## 만든 방식
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+이 프로젝트는 PRD → PLAN → DESIGN → 구현 → 검증(Check) → 보완(Act) 순서의 PDCA 방식으로, Claude Code와 함께 한 작업씩 만들고 확인했습니다.

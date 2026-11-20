@@ -1,4 +1,4 @@
-// Design Ref: §3 — 홈 화면(`/`): 가로로 넓은 화면에 ① 오늘의 뉴스 + 가. 규정 및 지침 등 | ② UN관련 소식(나·다), ③ 챗봇 순서로 배치한다.
+// Design Ref: §3 — 홈 화면(`/`): 가로로 넓은 화면에 ① 오늘의 뉴스 + ② UN결정문 | ③ 최근 현황(가. UNEP Pipeline 현황, 나. 초기보고서 및 방법론), ④ 챗봇 순서로 배치한다.
 // 디자인: 국제기구 누리집 느낌 — 짙은 남색 소개 띠, 연회색 바탕에 각진 흰 카드, 코너마다 다른 색 윗줄(파랑·주황·초록).
 // 기능과 내용은 그대로이고 모양만 바꾼 것이다. "전체 보기"는 따로 열리는 화면(/monthly, /news)으로 연결한다.
 import Link from "next/link";
@@ -10,6 +10,7 @@ import NewsList from "@/components/news/NewsList";
 const THEMES = {
   blue: { bar: "bg-[#0468b1]", no: "text-[#0468b1]" },
   orange: { bar: "bg-[#e5702a]", no: "text-[#e5702a]" },
+  purple: { bar: "bg-[#6b3fa0]", no: "text-[#6b3fa0]" },
   green: { bar: "bg-[#3f7e44]", no: "text-[#3f7e44]" },
 } as const;
 
@@ -89,7 +90,7 @@ export default function HomePage() {
 
       <div className="mx-auto max-w-7xl px-4 py-8">
         <div className="grid items-start gap-6 lg:grid-cols-2">
-          {/* 왼쪽 열: ① 오늘의 뉴스 + 그 아래 UN관련 소식의 "가. 규정 및 지침 등" */}
+          {/* 왼쪽 열: ① 오늘의 뉴스 + 그 아래 ② UN결정문 */}
           <div className="space-y-6">
             <Corner
               id="news"
@@ -101,29 +102,36 @@ export default function HomePage() {
             >
               <NewsList />
             </Corner>
-            {/* UN관련 소식 ②의 가 구역을 왼쪽 열 아래에 둔다 */}
-            <div id="rules" className="scroll-mt-20 lg:max-h-[720px] lg:overflow-y-auto">
-              <MonthlySummaries sections={[0]} />
-            </div>
+            {/* ② UN결정문: 파리협정 제6조 관련 결정문·감독기구 결정의 변동 요약 */}
+            <Corner
+              id="rules"
+              no="02"
+              theme="purple"
+              title="UN결정문"
+              description="파리협정 제6조 관련 결정문과 감독기구 결정의 변동 요약입니다. 확인을 마친 요약만 게시됩니다."
+              moreHref="/monthly"
+            >
+              <MonthlySummaries sections={[0]} bare />
+            </Corner>
           </div>
 
-          {/* 오른쪽 열: ② UN관련 소식 (나. UNEP Pipeline 현황 / 다. 초기보고서 및 방법론) */}
+          {/* 오른쪽 열: ③ 최근 현황 (가. UNEP Pipeline 현황 / 나. 초기보고서 및 방법론) */}
           <Corner
             id="latest"
-            no="02"
+            no="03"
             theme="orange"
-            title="UN관련 소식"
-            description="UN 규정 변동과 사업 현황을 국문 요약으로 보여 드립니다. 확인을 마친 요약만 게시됩니다. (가. 규정 및 지침 등은 왼쪽 오늘의 뉴스 아래에 있습니다.)"
+            title="최근 현황"
+            description="UN 사업 현황을 국문 요약으로 보여 드립니다. 확인을 마친 요약만 게시됩니다."
             moreHref="/monthly"
             scroll
           >
             <MonthlySummaries sections={[1, 2]} />
           </Corner>
 
-          {/* ③ 챗봇 (가로 전체) */}
+          {/* ④ 챗봇 (가로 전체) */}
           <Corner
             id="chatbot"
-            no="03"
+            no="04"
             theme="green"
             title="챗봇 — 규정 질문하기"
             description="국제감축 규정(UN 제도, 국내 법령·지침)을 쉬운 국문으로 알려 드립니다."

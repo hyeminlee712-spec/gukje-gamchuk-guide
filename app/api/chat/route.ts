@@ -69,13 +69,13 @@ function projectStatusResponse(remaining: number): Response {
   const body: ChatSuccessResponse = {
     status: "project_status",
     answer: {
-      text: "사업 진행현황은 챗봇이 아니라 'UN관련 소식' 화면에서 확인해 주세요.\n\n이 화면에서 UNEP Pipeline 현황과 초기보고서·방법론 현황을 국문 요약으로 볼 수 있습니다.",
+      text: "사업 진행현황은 챗봇이 아니라 '최근 현황' 화면에서 확인해 주세요.\n\n이 화면에서 UNEP Pipeline 현황과 초기보고서·방법론 현황을 국문 요약으로 볼 수 있습니다.",
       sources: [],
       disclaimer: DISCLAIMER,
     },
     notice: {
       title: "바로 가기",
-      links: [{ label: "UN관련 소식 화면", href: "/monthly" }],
+      links: [{ label: "최근 현황 화면", href: "/monthly" }],
     },
     remaining,
     temporary: false,

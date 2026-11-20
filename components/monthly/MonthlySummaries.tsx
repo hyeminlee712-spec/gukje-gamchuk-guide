@@ -19,8 +19,9 @@ const TONES = [
   { box: "border-l-[6px] border-[#00859b]", title: "text-[#00859b]" },
 ] as const;
 
+// bare: true이면 구역 상자·제목 없이 카드만 보여 준다(홈 화면에서 코너가 제목을 대신할 때).
 // sections: 보여 줄 구역 번호(0=가, 1=나, 2=다). 없으면 모두 보여 준다. 홈 화면에서 구역을 나눠 배치할 때 쓴다.
-export default function MonthlySummaries({ sections }: { sections?: number[] } = {}) {
+export default function MonthlySummaries({ sections, bare }: { sections?: number[]; bare?: boolean } = {}) {
   const [state, setState] = useState<LoadState>({ kind: "loading" });
 
   useEffect(() => {
@@ -77,6 +78,18 @@ export default function MonthlySummaries({ sections }: { sections?: number[] } =
       {SUMMARY_SECTIONS.map((section, index) => {
         if (sections && !sections.includes(index)) return null;
         const tone = TONES[index % TONES.length];
+        if (bare) {
+          const own = section.categories.flatMap(({ category }) => state.items.filter((i) => i.category === category));
+          return own.length === 0 ? (
+            <p key={section.title} className="text-sm text-foreground/70">이번 달 변동사항이 없습니다.</p>
+          ) : (
+            <div key={section.title} className="space-y-3">
+              {own.map((item) => (
+                <SummaryCard key={item.id} item={item} />
+              ))}
+            </div>
+          );
+        }
         const headingId = `latest-section-${index}`;
         return (
           <section

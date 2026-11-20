@@ -25,18 +25,18 @@ export const SUMMARY_SECTIONS: {
   categories: { category: SummaryCategory; label?: string }[];
 }[] = [
   {
-    title: "가. 규정 및 지침 등",
+    title: "UN결정문",
     description:
       "파리협정 제6조 관련 결정문과 감독기구 결정의 변동 요약입니다.",
     categories: [{ category: "un_rules" }],
   },
   {
-    title: "나. UNEP Pipeline 현황",
+    title: "가. UNEP Pipeline 현황",
     description: "한국이 관련된 사업과 지난달 대비 달라진 내용의 요약입니다.",
     categories: [{ category: "unep_pipeline" }],
   },
   {
-    title: "다. 초기보고서 및 방법론",
+    title: "나. 초기보고서 및 방법론",
     description: "초기보고서(Initial Report)와 방법론(Methodology) 현황 요약입니다.",
     categories: [
       { category: "unfccc_initial_report", label: "초기보고서" },

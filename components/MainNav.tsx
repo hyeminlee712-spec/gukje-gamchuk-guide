@@ -1,10 +1,11 @@
-// Design Ref: §3.1 — 한 화면(홈)의 세 구역(오늘의 뉴스·UN관련 소식·챗봇)으로 이동하는 메뉴. 구역 순서와 같다.
+// Design Ref: §3.1 — 한 화면(홈)의 네 구역(오늘의 뉴스·UN결정문·최근 현황·챗봇)으로 이동하는 메뉴. 구역 순서와 같다.
 // 각 구역은 홈 화면 안에 함께 있고, 메뉴를 누르면 그 구역으로 이동한다.
 import Link from "next/link";
 
 const MENU_ITEMS = [
   { href: "/#news", label: "오늘의 뉴스", dot: "bg-[#0468b1]" },
-  { href: "/#latest", label: "UN관련 소식", dot: "bg-[#e5702a]" },
+  { href: "/#rules", label: "UN결정문", dot: "bg-[#6b3fa0]" },
+  { href: "/#latest", label: "최근 현황", dot: "bg-[#e5702a]" },
   { href: "/#chatbot", label: "챗봇", dot: "bg-[#3f7e44]" },
 ] as const;
 
